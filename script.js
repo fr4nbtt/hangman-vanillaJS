@@ -183,5 +183,3 @@ playAgainBtn.addEventListener("click", () => {
 });
 
 displayWord();
-
-// commit msg "Add game functionality"
