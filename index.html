@@ -5,7 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
-    <title>Starter</title>
+    <title>Hangman</title>
   </head>
-  <body></body>
+  <body>
+    <h1>Hangman Game</h1>
+    <p>Uncover the secret word: Press a letter to start guessing!</p>
+    <main class="game-container">
+      <svg height="250" width="200" class="figure-container">
+        <!-- SVG gallows structure -->
+        <line x1="50" y1="20" x2="140" y2="20" />
+        <line x1="140" y1="20" x2="140" y2="55" />
+        <line x1="50" y1="20" x2="50" y2="242" />
+        <line x1="20" y1="245" x2="82" y2="245" />
+
+        <!-- Hangman parts -->
+        <!-- Head -->
+        <circle cx="140" cy="74" r="18" class="figure-part" />
+        <!-- Body -->
+        <line x1="140" y1="94" x2="140" y2="164" class="figure-part" />
+        <!-- Arms -->
+        <line x1="140" y1="106" x2="105" y2="128" class="figure-part" />
+        <line x1="140" y1="106" x2="175" y2="128" class="figure-part" />
+        <!-- Legs -->
+        <line x1="140" y1="165" x2="115" y2="210" class="figure-part" />
+        <line x1="140" y1="165" x2="165" y2="210" class="figure-part" />
+      </svg>
+
+      <!-- Wrong letters display -->
+      <div class="wrong-letters-container">
+        <div id="wrong-letters"></div>
+      </div>
+
+      <!-- Current word display -->
+      <div class="word" id="word"></div>
+    </main>
+
+    <!-- Game ending messages Pop-up -->
+    <div class="popup-container" id="popup-container">
+      <div class="popup">
+        <h2 id="ending-message"></h2>
+        <button id="play-button">Start Game</button>
+      </div>
+    </div>
+
+    <!-- Used letter notification -->
+    <div class="notification-container show" id="notification-container">
+      <p>Letter already entered!</p>
+    </div>
+  </body>
 </html>
