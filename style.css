@@ -3,6 +3,7 @@
 :root {
   --black: #27272a;
   --white: #f8fafc;
+  --overlay-black: rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -88,13 +89,12 @@ h1 {
 /*  */
 
 .popup-container {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--overlay-black);
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  /* display: flex; */
   display: none;
   align-items: center;
   justify-content: center;
@@ -131,7 +131,7 @@ h1 {
 /* NOTIFICATION */
 
 .notification-container {
-  background-color: rgba(0, 0, 0, 0.3); /* Add to root */
+  background-color: var(--overlay-black);
   border-radius: 0.75rem 0.75rem 0 0;
   padding: 1rem 1.25rem;
   position: absolute;
