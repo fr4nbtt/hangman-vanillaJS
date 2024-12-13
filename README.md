@@ -1,0 +1,1 @@
+## Hangman Game - Vanilla JS
