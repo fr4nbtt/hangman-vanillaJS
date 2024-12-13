@@ -5,7 +5,7 @@ const wordEl = document.querySelector("#word");
 const wrongLettersEl = document.querySelector("#wrong-letters");
 
 // Interactive elements
-const playAgainBtn = document.querySelector("#play-again");
+const playAgainBtn = document.querySelector("#play-button");
 
 // Modal elements
 const popup = document.querySelector("#popup-container");
@@ -13,7 +13,7 @@ const notification = document.querySelector("#notification-container");
 const finalMessage = document.querySelector("#final-message");
 
 // Hangman parts
-const figureParts = document.querySelectorAll("figure-part");
+const figureParts = document.querySelectorAll(".figure-part");
 
 // Local Words Array (For Development)
 // TODO - Implement a function to fetch a random valid word from API
@@ -107,7 +107,28 @@ function displayWord() {
 
 // Update wrongs letters
 function updateWrongLettersEl() {
-  console.log("Update wrong");
+  // Display wrong letters
+  wrongLettersEl.innerHTML = `
+    ${wrongLetters.length > 0 ? `<p>Wrong Letters:</p>` : ""}
+    ${wrongLetters.map((letter) => `<span>${letter}</span>`)}
+  `;
+
+  // Display hangman parts
+  figureParts.forEach((part, index) => {
+    const errors = wrongLetters.length;
+
+    if (index < errors) {
+      part.style.display = "block";
+    } else {
+      part.style.display = "none";
+    }
+  });
+
+  // Check if lost
+  if (wrongLetters.length === figureParts.length) {
+    finalMessage.innerText = "You lost! 😱";
+    popup.style.display = "flex";
+  }
 }
 
 // Show notification
@@ -143,6 +164,22 @@ window.addEventListener("keydown", (e) => {
       }
     }
   }
+});
+
+// Restart game and play again
+playAgainBtn.addEventListener("click", () => {
+  // Empty the correct and wrong letters arrays
+  correctLetters.splice(0);
+  wrongLetters.splice(0);
+
+  // Get a new word
+  selectedWord = words[Math.floor(Math.random() * words.length)]; // TODO create fn to DRY
+
+  popup.style.display = "none";
+
+  displayWord();
+
+  updateWrongLettersEl();
 });
 
 displayWord();
