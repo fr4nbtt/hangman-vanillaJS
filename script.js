@@ -79,7 +79,7 @@ const words = [
 let selectedWord = words[Math.floor(Math.random() * words.length)];
 
 // Correct letters array
-const correctLetters = ["a", "p", "p", "l", "e"];
+const correctLetters = [];
 
 // Wrong letters array
 const wrongLetters = [];
@@ -105,4 +105,46 @@ function displayWord() {
   }
 }
 
+// Update wrongs letters
+function updateWrongLettersEl() {
+  console.log("Update wrong");
+}
+
+// Show notification
+function showNotification() {
+  notification.classList.add("show");
+
+  setTimeout(() => {
+    notification.classList.remove("show");
+  }, 2000);
+}
+
+// Keydown letter press
+window.addEventListener("keydown", (e) => {
+  const letter = e.key.toLowerCase();
+
+  if (letter >= "a" && letter <= "z") {
+    console.log(`You pressed the letter: ${letter}`);
+    if (selectedWord.includes(letter)) {
+      if (!correctLetters.includes(letter)) {
+        correctLetters.push(letter);
+
+        displayWord();
+      } else {
+        showNotification();
+      }
+    } else {
+      if (!wrongLetters.includes(letter)) {
+        wrongLetters.push(letter);
+
+        updateWrongLettersEl();
+      } else {
+        showNotification();
+      }
+    }
+  }
+});
+
 displayWord();
+
+// commit msg "Add game functionality"
