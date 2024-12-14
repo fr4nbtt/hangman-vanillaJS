@@ -15,87 +15,83 @@ const finalMessage = document.querySelector("#final-message");
 // Hangman parts
 const figureParts = document.querySelectorAll(".figure-part");
 
-// Local Words Array (For Development)
-// TODO - Implement a function to fetch a random valid word from API
-// https://random-word-api.herokuapp.com/home
-const words = [
-  "apple",
-  "banana",
-  "melon",
-  "lemon",
-  "candy",
-  "pearl",
-  "daisy",
-  "charm",
-  "dream",
-  "cloud",
-  "stone",
-  "flame",
-  "river",
-  "ocean",
-  "music",
-  "light",
-  "magic",
-  "frost",
-  "night",
-  "storm",
-  "whale",
-  "crane",
-  "piano",
-  "glove",
-  "brace",
-  "bloom",
-  "crisp",
-  "jolly",
-  "zebra",
-  "swing",
-  "tweet",
-  "voice",
-  "globe",
-  "sugar",
-  "table",
-  "chair",
-  "water",
-  "heart",
-  "smile",
-  "peace",
-  "crown",
-  "wonder",
-  "picture",
-  "journey",
-  "friend",
-  "inspire",
-  "harmony",
-  "beautiful",
-  "adventure",
-  "imagine",
-  "fantastic",
-  "chocolate",
-  "discovery",
-  "enthusiastic",
-  "extraordinary",
-];
+// Fetch Random Word Function
+async function fetchRandomWord() {
+  const apis = [
+    "https://random-word-api.herokuapp.com/word",
+    "https://random-word-api.herokuapp.com/word",
+  ];
 
-let selectedWord = words[Math.floor(Math.random() * words.length)];
+  const fallbackWords = [
+    "apple",
+    "banana",
+    "magic",
+    "world",
+    "code",
+    "dream",
+    "smile",
+    "river",
+  ];
 
-// Correct letters array
+  for (const apiUrl of apis) {
+    try {
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const words = await response.json();
+
+      // Directly return the first word from the API response
+      return words[0];
+    } catch (error) {
+      console.error(`Failed to fetch from ${apiUrl}:`, error);
+    }
+  }
+
+  // Final fallback if all API calls fail
+  return fallbackWords[Math.floor(Math.random() * fallbackWords.length)];
+}
+
+// Global variables
+let selectedWord = "";
 const correctLetters = [];
-
-// Wrong letters array
 const wrongLetters = [];
 
-// Show hidden word
+// Initialize Game
+async function initializeGame() {
+  // Hide popup if it's visible
+  popup.style.display = "none";
+
+  // Fetch a random word
+  selectedWord = await fetchRandomWord();
+
+  // Reset game state
+  correctLetters.length = 0;
+  wrongLetters.length = 0;
+
+  // Reset figure parts
+  figureParts.forEach((part) => {
+    part.style.display = "none";
+  });
+
+  // Initial display
+  displayWord();
+  updateWrongLettersEl();
+}
+
 function displayWord() {
   wordEl.innerHTML = `
-  ${selectedWord
-    .split("")
-    .map(
-      (letter) => `<span class="letter">
-                    ${correctLetters.includes(letter) ? letter : ""}
-                 </span>`
-    )
-    .join("")}
-  `;
+    ${selectedWord
+      .split("")
+      .map(
+        (letter) => `<span class="letter">
+                        ${correctLetters.includes(letter) ? letter : ""}
+                     </span>`
+      )
+      .join("")}
+    `;
 
   const innerWord = wordEl.innerText.replace(/\n/g, "");
 
@@ -105,13 +101,12 @@ function displayWord() {
   }
 }
 
-// Update wrongs letters
 function updateWrongLettersEl() {
   // Display wrong letters
   wrongLettersEl.innerHTML = `
-    ${wrongLetters.length > 0 ? `<p>Wrong Letters:</p>` : ""}
-    ${wrongLetters.map((letter) => `<span>${letter}</span>`)}
-  `;
+        ${wrongLetters.length > 0 ? `<p>Wrong Letters:</p>` : ""}
+        ${wrongLetters.map((letter) => `<span>${letter}</span>`)}
+    `;
 
   // Display hangman parts
   figureParts.forEach((part, index) => {
@@ -131,7 +126,6 @@ function updateWrongLettersEl() {
   }
 }
 
-// Show notification
 function showNotification() {
   notification.classList.add("show");
 
@@ -144,42 +138,28 @@ function showNotification() {
 window.addEventListener("keydown", (e) => {
   const letter = e.key.toLowerCase();
 
-  if (letter >= "a" && letter <= "z") {
-    console.log(`You pressed the letter: ${letter}`);
+  // Check if the key is a letter (a-z) and if it's a keydown event for letter keys
+  if (e.code.startsWith("Key") && letter >= "a" && letter <= "z") {
     if (selectedWord.includes(letter)) {
       if (!correctLetters.includes(letter)) {
         correctLetters.push(letter);
-
         displayWord();
       } else {
-        showNotification();
+        showNotification(); // Notify if the letter has already been guessed
       }
     } else {
       if (!wrongLetters.includes(letter)) {
         wrongLetters.push(letter);
-
         updateWrongLettersEl();
       } else {
-        showNotification();
+        showNotification(); // Notify if the letter has already been guessed
       }
     }
   }
 });
 
-// Restart game and play again
-playAgainBtn.addEventListener("click", () => {
-  // Empty the correct and wrong letters arrays
-  correctLetters.splice(0);
-  wrongLetters.splice(0);
+// Restart game
+playAgainBtn.addEventListener("click", initializeGame);
 
-  // Get a new word
-  selectedWord = words[Math.floor(Math.random() * words.length)]; // TODO create fn to DRY
-
-  popup.style.display = "none";
-
-  displayWord();
-
-  updateWrongLettersEl();
-});
-
-displayWord();
+// Initial game start
+initializeGame();
