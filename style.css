@@ -60,11 +60,18 @@ h1 {
 }
 
 .wrong-letters-container p {
-  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  text-decoration: underline;
+  margin: 0 0 0.75rem;
 }
 
 .wrong-letters-container span {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  border: 2px solid var(--white);
+  border-radius: 0.4rem;
+  padding: 0 0.45rem;
+  aspect-ratio: 1/1;
+  margin-right: 0.2rem;
 }
 
 .word {
@@ -102,9 +109,10 @@ h1 {
 
 .popup {
   background-color: #1e293b;
-  border-radius: 0.3rem;
-  box-shadow: 0 1rem 0.75rem 0.25rem rgba(0, 0, 0, 0.15);
-  padding: 1.25rem;
+  border: 2px solid black;
+  border-radius: 0.7rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
   text-align: center;
 }
 
@@ -112,12 +120,19 @@ h1 {
   cursor: pointer;
   background-color: var(--white);
   font-family: inherit;
-  font-size: 1rem;
-  letter-spacing: 1px;
+  font-size: 1.25rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  border: none;
-  margin-top: 1.25rem;
-  padding: 0.75rem 1.25rem;
+  border: 1px solid black;
+  border-radius: 0.35rem;
+  margin-top: 0.25rem;
+  padding: 0.75rem 1.75rem;
+  width: 100%;
+}
+
+.popup h2 {
+  margin: 0 0 0.85rem;
+  font-size: 1.75rem;
 }
 
 .popup button:active {

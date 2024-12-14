@@ -105,7 +105,7 @@ function updateWrongLettersEl() {
   // Display wrong letters
   wrongLettersEl.innerHTML = `
         ${wrongLetters.length > 0 ? `<p>Wrong Letters:</p>` : ""}
-        ${wrongLetters.map((letter) => `<span>${letter}</span>`)}
+        ${wrongLetters.map((letter) => `<span>${letter}</span>`).join("")}
     `;
 
   // Display hangman parts
