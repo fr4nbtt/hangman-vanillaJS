@@ -15,6 +15,12 @@ const finalMessage = document.querySelector("#final-message");
 // Hangman parts
 const figureParts = document.querySelectorAll(".figure-part");
 
+// Global variables
+let selectedWord = "";
+const correctLetters = [];
+const wrongLetters = [];
+let gameActive = true; // Game state variable
+
 // Fetch Random Word Function
 async function fetchRandomWord() {
   const apis = [
@@ -42,34 +48,24 @@ async function fetchRandomWord() {
       }
 
       const words = await response.json();
-
-      // Directly return the first word from the API response
-      return words[0];
+      return words[0]; // Return the first word from the API response
     } catch (error) {
       console.error(`Failed to fetch from ${apiUrl}:`, error);
     }
   }
 
-  // Final fallback if all API calls fail
-  return fallbackWords[Math.floor(Math.random() * fallbackWords.length)];
+  return fallbackWords[Math.floor(Math.random() * fallbackWords.length)]; // Fallback
 }
-
-// Global variables
-let selectedWord = "";
-const correctLetters = [];
-const wrongLetters = [];
 
 // Initialize Game
 async function initializeGame() {
-  // Hide popup if it's visible
-  popup.style.display = "none";
-
-  // Fetch a random word
-  selectedWord = await fetchRandomWord();
+  popup.style.display = "none"; // Hide popup if it's visible
+  selectedWord = await fetchRandomWord(); // Fetch a random word
 
   // Reset game state
   correctLetters.length = 0;
   wrongLetters.length = 0;
+  gameActive = true; // Set game state to active
 
   // Reset figure parts
   figureParts.forEach((part) => {
@@ -96,8 +92,9 @@ function displayWord() {
   const innerWord = wordEl.innerText.replace(/\n/g, "");
 
   if (innerWord === selectedWord) {
-    finalMessage.innerText = "Congratulations! You won! 😎";
+    finalMessage.innerText = "You won! 😎";
     popup.style.display = "flex";
+    gameActive = false; // Set game state to inactive on win
   }
 }
 
@@ -123,6 +120,7 @@ function updateWrongLettersEl() {
   if (wrongLetters.length === figureParts.length) {
     finalMessage.innerText = "You lost! 😱";
     popup.style.display = "flex";
+    gameActive = false; // Set game state to inactive on loss
   }
 }
 
@@ -138,8 +136,13 @@ function showNotification() {
 window.addEventListener("keydown", (e) => {
   const letter = e.key.toLowerCase();
 
-  // Check if the key is a letter (a-z) and if it's a keydown event for letter keys
-  if (e.code.startsWith("Key") && letter >= "a" && letter <= "z") {
+  // Check if the game is active and if the key is a letter (a-z)
+  if (
+    gameActive &&
+    e.code.startsWith("Key") &&
+    letter >= "a" &&
+    letter <= "z"
+  ) {
     if (selectedWord.includes(letter)) {
       if (!correctLetters.includes(letter)) {
         correctLetters.push(letter);

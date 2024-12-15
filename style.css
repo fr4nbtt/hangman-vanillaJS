@@ -68,9 +68,10 @@ h1 {
 .wrong-letters-container span {
   font-size: 1.3rem;
   border: 2px solid var(--white);
-  border-radius: 0.4rem;
-  padding: 0 0.45rem;
-  aspect-ratio: 1/1;
+  border-radius: 50%;
+  padding: 0.1rem 0.55rem;
+  width: 100%;
+  aspect-ratio: 1;
   margin-right: 0.2rem;
 }
 
